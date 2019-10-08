@@ -1,4 +1,4 @@
-# CSC290_CEGA
+# Blockfall OR Citrus OR Setric
 
 
 (This is temporary ReadMe)This is a public repository for the CSC290 group project.
