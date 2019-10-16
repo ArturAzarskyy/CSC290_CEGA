@@ -5,6 +5,7 @@ pygame.init()
 game_height = 800 # Size of the squeares will be aproximetly 40
 game_width =  400 # It is based that the grid is 10  * 20
 
+screen_width = 600
 
 
 size = 40
@@ -16,13 +17,13 @@ curr_y = 40 # The bottom of the block
 curr_x = start_x
 
 
-win = pygame.display.set_mode((game_width, game_height))
+win = pygame.display.set_mode((screen_width, game_height))
 
 run = True
 
 # We can create a list of shape cordinates
 while run:
-    pygame.time.delay(1900);
+    pygame.time.delay(1900)
     win.fill((0, 0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -31,6 +32,7 @@ while run:
 
     # we would probably get position in the grid form the model and multiply every coordinate by the size of the block
 
+    pygame.draw.line(win,(0,255,0), (game_width,0), (game_width, game_height),1)
     # pygame.draw.polygon(win, (255, 0, 0), [(0, curr_y - 40), (160, curr_y - 40), (160, curr_y), (0, curr_y)])
     #
     # if curr_y != 800:
