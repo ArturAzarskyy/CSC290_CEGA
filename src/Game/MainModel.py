@@ -1,6 +1,6 @@
 
 
-class main_model:
+class MainModel:
     def __init__(self):
         self.curr_x_pos = 4
         self.curr_y_pos = 1
