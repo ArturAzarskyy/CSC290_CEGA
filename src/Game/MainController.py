@@ -1,6 +1,6 @@
 import pygame
 
-class main_controller:
+class MainController:
 
     def __init__(self, game):
         self.game = game
