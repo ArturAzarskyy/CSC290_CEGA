@@ -1,5 +1,5 @@
 import pygame
-
+import src.Controllers, src.Model
 pygame.init()
 
 game_height = 800 # Size of the squeares will be aproximetly 40
@@ -17,6 +17,9 @@ curr_y = 40 # The bottom of the block
 curr_x = start_x
 
 
+game = src.Model.main_model
+controller = src.Controllers.main_controller.main_controller(game)
+
 win = pygame.display.set_mode((screen_width, game_height))
 
 run = True
@@ -28,6 +31,8 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        else:
+            controller.read_event(event)
 
 
     # we would probably get position in the grid form the model and multiply every coordinate by the size of the block
