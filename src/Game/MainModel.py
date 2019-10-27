@@ -1,5 +1,6 @@
 import pygame
 
+
 blocks = [
 
    [[1, 1, 1],
@@ -42,6 +43,27 @@ blocks = [
 
 
 class MainModel:
-    def __init__(self):
+    def __init__(self, width, height):
+
+        self.width = 10
+        self.height = 20
         self.curr_x_pos = 4
         self.curr_y_pos = 1
+
+        self.grid = []
+
+
+    def make_grid(self):
+      '''
+        (DoomFall) -> None
+        Given width, height as 10 and 20 respectively,
+        create a 2D grid
+        '''
+        
+        for i in range(self.height):
+            self.grid.append([])
+            for j in range(self.width):
+                self.grid[i].append('[ ]') 
+        
+        self.grid[self.curr_x_pos][self.curr_y_pos] = rand(blocks)
+    
