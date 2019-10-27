@@ -41,8 +41,6 @@ blocks = [
 
 
 
-
-
 class MainModel:
     def __init__(self, width, height):
 
@@ -50,8 +48,11 @@ class MainModel:
         self.height = 20
         self.curr_x_pos = 4
         self.curr_y_pos = 1
+        self.level = 1
+        self.score = 0
 
         self.grid = []
+
 
 
 
@@ -76,6 +77,4 @@ class MainModel:
     def move_block_right(self) -> None:
         """Move the current block 1 grid to the right"""
         self.curr_x_pos += 1
-
-
 
