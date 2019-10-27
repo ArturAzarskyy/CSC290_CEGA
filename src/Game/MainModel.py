@@ -50,6 +50,9 @@ class MainModel:
         self.curr_y_pos = 1
         self.level = 1
         self.score = 0
+        self.curr_block = random.choice(blocks)
+        self.curr_block_h = len(self.curr_block)
+        self.curr_block_w = len(self.curr_block[0])
 
         self.grid = []
 
@@ -68,12 +71,20 @@ class MainModel:
         self.grid[self.curr_x_pos][self.curr_y_pos] = rand(blocks)
 
     def move_block_left(self) -> None:
-        """Move the current block 1 grid to the left"""
-        self.curr_x_pos -= 1
+        """
+        Move the current block 1 grid to the left
+        if it is out of bound, ignore it
+        """
+        if self.curr_x_pos > 0:
+            self.curr_x_pos -= 1
 
     def move_block_right(self) -> None:
-        """Move the current block 1 grid to the right"""
-        self.curr_x_pos += 1
+        """
+        Move the current block 1 grid to the right
+        if it is out of bound, ignore it
+        """
+        if self.curr_x_pos + self.curr_block_w < self.width:
+            self.curr_x_pos += 1
 
     def get_level(self):
         return self.level
