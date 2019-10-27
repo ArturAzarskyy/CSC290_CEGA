@@ -4,37 +4,37 @@ import random
 
 blocks = [
 
-   [[1, 1, 1],
+    [[1, 1, 1],
 
-    [0, 1, 0]],
-
-
-   [[0, 2, 2],
-
-    [2, 2, 0]],
+     [0, 1, 0]],
 
 
-   [[3, 3, 0],
+    [[0, 2, 2],
 
-    [0, 3, 3]],
-
-
-   [[4, 0, 0],
-
-    [4, 4, 4]],
+     [2, 2, 0]],
 
 
-   [[0, 0, 5],
+    [[3, 3, 0],
 
-    [5, 5, 5]],
-
-
-   [[6, 6, 6, 6]],
+     [0, 3, 3]],
 
 
-   [[7, 7],
+    [[4, 0, 0],
 
-    [7, 7]]
+     [4, 4, 4]],
+
+
+    [[0, 0, 5],
+
+     [5, 5, 5]],
+
+
+    [[6, 6, 6, 6]],
+
+
+    [[7, 7],
+
+     [7, 7]]
 
 ]
 
@@ -53,15 +53,12 @@ class MainModel:
 
         self.grid = []
 
-
-
-
     def make_grid(self):
-      '''
+        '''
         (DoomFall) -> None
         Given width, height as 10 and 20 respectively,
-        create a 2D grid
-        '''
+         create a 2D grid
+           '''
 
         for i in range(self.height):
             self.grid.append([])
@@ -77,4 +74,11 @@ class MainModel:
     def move_block_right(self) -> None:
         """Move the current block 1 grid to the right"""
         self.curr_x_pos += 1
+
+    def get_level(self):
+        return self.level
+
+    def get_score(self):
+        return self.score
+
 
