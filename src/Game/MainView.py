@@ -4,18 +4,16 @@ from src.Game import MainController, MainModel
 
 pygame.init()
 
+shape_size = 40
+game_height = shape_size * 20
+game_width = shape_size * 10
+screen_width = 600
 
-# We can create a list of shape cordinates
+
+# We can create a list of shape coordinates
 def run_game():
     game = MainModel.MainModel()
     controller = MainController.MainController(game)
-
-
-    game_height = 800 # Size of the squeares will be aproximetly 40
-    game_width =  400 # It is based that the grid is 10  * 20
-    screen_width = 600
-
-    size = 40
 
     #From here
     start_x = game_width/2
@@ -31,10 +29,11 @@ def run_game():
 
     win = pygame.display.set_mode((screen_width, game_height))
 
-    pygame.draw.line(win, (0, 255, 0), (game_width, 0), (game_width, game_height), 1)
+    draw_background(win)
+
     isRunning = True
     while isRunning:
-        pygame.time.delay(1900)# this value will be received from the model
+        pygame.time.delay(500)# this value will be received from the model
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 isRunning = False
@@ -75,6 +74,15 @@ def draw_block(pygame_window, previous_position, new_position):
         pygame.draw.polygon(pygame_window, (255,0,0), new_position)
 
     return new_position
+
+def draw_background(pygame_window):
+    # Draw Grid
+    for i in range(shape_size, game_width, shape_size):
+        pygame.draw.line(pygame_window, (169, 169, 169), (i, 0), (i, game_height), 1)
+    for j in range(shape_size, game_height, shape_size):
+        pygame.draw.line(pygame_window, (169, 169, 169), (0, j), (game_width, j), 1)
+
+    pygame.draw.line(pygame_window, (0, 255, 0), (game_width, 0), (game_width, game_height), 1)
 
 
 if __name__ == "__main__":
