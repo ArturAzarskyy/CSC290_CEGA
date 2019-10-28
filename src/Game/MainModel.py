@@ -68,7 +68,7 @@ class MainModel:
             for j in range(self.width):
                 self.grid[i].append('[ ]')
 
-        self.grid[self.curr_x_pos][self.curr_y_pos] = rand(blocks)
+        self.grid[self.curr_x_pos][self.curr_y_pos] = random.choice(blocks)
 
     def move_block_left(self) -> None:
         """
