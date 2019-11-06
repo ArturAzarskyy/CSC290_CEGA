@@ -39,20 +39,19 @@ blocks = [
 ]
 
 
-
-
 class MainModel:
     def __init__(self, width, height):
 
         self.width = 10
         self.height = 20
-        self.curr_x_pos = 4
-        self.curr_y_pos = 1
+        self.curr_x_pos = 4 #The middle right of the block
+        self.curr_y_pos = 1 #The bottom of the block
         self.level = 1
         self.score = 0
         self.curr_block = random.choice(blocks)
         self.curr_block_h = len(self.curr_block)
         self.curr_block_w = len(self.curr_block[0])
+        self.curr_block_lowest = self.get_block_lowest()
 
         self.grid = []
 
@@ -75,7 +74,7 @@ class MainModel:
         Move the current block 1 grid to the left
         if it is out of bound, ignore it
         """
-        if self.curr_x_pos > 0:
+        if self.curr_x_pos > self.curr_block_w/2:
             self.curr_x_pos -= 1
 
     def move_block_right(self) -> None:
@@ -83,7 +82,7 @@ class MainModel:
         Move the current block 1 grid to the right
         if it is out of bound, ignore it
         """
-        if self.curr_x_pos + self.curr_block_w < self.width:
+        if self.curr_x_pos + (self.curr_block_w-1)/2 < self.width:
             self.curr_x_pos += 1
 
     def get_level(self):
@@ -91,5 +90,19 @@ class MainModel:
 
     def get_score(self):
         return self.score
+
+    def get_block_lowest(self) -> list:
+        """
+        get a list of relative position of each column from the lowest point of
+        the block to the lowest point of that column
+        :return:
+        """
+        lst = [0] * self.curr_block_w
+        for x in range(self.curr_block_w):
+            y = self.curr_block_h
+            while self.curr_block[y][x] != 0:
+                lst[x] += 1
+                y -= 1
+        return lst
 
 
