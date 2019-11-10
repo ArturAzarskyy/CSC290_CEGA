@@ -23,6 +23,8 @@ class MainController:
                 self._rotate(-1)
             elif event.key == pygame.K_e:
                 self._rotate(1)
+            elif event.key == pygame.K_SPACE:
+                self._drop_block()
         return None
 
 
@@ -38,3 +40,7 @@ class MainController:
             self.game.move_block_left()
         else:
             self.game.move_block_right()
+
+    def _drop_block(self):
+        while self.game.can_move_down():
+            self.game.move_block_down()
