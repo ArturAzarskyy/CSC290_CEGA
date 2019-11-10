@@ -9,6 +9,7 @@ game_height = shape_size * 20
 game_width = shape_size * 10
 screen_width = 600
 font = pygame.font.SysFont('Agency FB', 30)
+big_font = pygame.font.SysFont('Agency FB', 48)  # Used only for "Game Over"
 bg_color = (5, 5, 5)
 
 
@@ -71,6 +72,10 @@ def run_game():
             curr_y += 40
             print(curr_y) #this functionality will be in model class
 
+        # example use: draw_end_game(win, game.get_score()) should be called once when the game is over
+        if curr_y == 800:
+            draw_end_game(win, game.get_score())
+
         next_position = [(0, curr_y - 40), (160, curr_y - 40), (160, curr_y), (0, curr_y)]
 
         pygame.display.update()
@@ -122,6 +127,22 @@ def draw_grid(pygame_window):
         pygame.draw.line(pygame_window, (169, 169, 169), (0, j), (game_width, j), 1)
     pygame.draw.line(pygame_window, (0, 255, 0), (game_width, 0), (game_width, game_height), 1)
 
+
+def draw_end_game(pygame_window, final_score):
+    """
+    This function draws an overlay for the end game screen including the final score
+    :param pygame_window: environment where to make a translucent screen and draw final_score
+    :param final_score: final score that was reached by the player
+    :return: None
+    """
+    s = pygame.Surface((game_width, game_height))
+    s.set_alpha(128)
+    s.fill((0,0,0))
+    game_over_text = big_font.render("Game Over", False, (169, 169, 169))
+    score_text = font.render("Final Score: " + str(final_score), False, (169, 169, 169))
+    pygame_window.blit(s, (0,0))
+    pygame_window.blit(game_over_text, (game_width/2 - (big_font.size("Game Over")[0]/2), game_height/3))
+    pygame_window.blit(score_text, (game_width/2 - (font.size("Final Score: " + str(final_score))[0]/2), game_height/3 + 55))
 
 if __name__ == "__main__":
     run_game()
