@@ -44,11 +44,14 @@ class MainModel:
 
         self.width = 10
         self.height = 24
+
         # The middle of the block, middle right if the block has even width
         self.curr_x_pos = 5
         self.curr_y_pos = 21  # The bottom of the block
+
         self.level = 1
         self.score = 0
+
         self.curr_block = random.choice(blocks)
         self.curr_block_h = len(self.curr_block)
         self.curr_block_w = len(self.curr_block[0])
@@ -57,6 +60,8 @@ class MainModel:
         self.curr_block_left = self.curr_x_pos - self.curr_block_w//2
         # The rightmost position of the block
         self.curr_block_right = self.curr_x_pos + (self.curr_block_w+1)//2
+
+        self.next_block = random.choice(blocks)
 
         self.grid = []
 
