@@ -128,4 +128,9 @@ class MainModel:
                 return True
         return False
 
+    def get_next_block(self) -> list:
+        """
+        :return: next dropping block
+        """
+        return self.next_block
 
