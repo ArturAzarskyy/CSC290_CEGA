@@ -55,7 +55,7 @@ class MainModel:
         self.curr_block = random.choice(blocks)
         self.curr_block_h = len(self.curr_block)
         self.curr_block_w = len(self.curr_block[0])
-        self.curr_block_lowest = self._get_block_lowest()
+        # self.curr_block_lowest = self._get_block_lowest()
         # The leftmost position of the block
         self.curr_block_left = self.curr_x_pos - self.curr_block_w//2
         # The rightmost position of the block
