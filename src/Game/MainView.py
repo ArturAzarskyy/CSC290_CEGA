@@ -100,9 +100,10 @@ def draw_block(pygame_window, old_pos, game):
     This function imitates the effect that the block is falling.
     This is achieved by drawing previous position in color of background.
     :param pygame_window: environment where to draw the the block
-    :param previous_position: Array of (x, y) coordinates going clockwise. Which indicate the last position of the block
-    :param new_position: Array of (x, y) coordinates  going clockwise. Which represent where to draw the block next
-    :return: Array of (x, y) points used
+    :param previous_position: Tuple (x, y) coordinates which indicate the last position of the block
+    :param game: this is the game in which the game is run, used to get the current coordinates of the block location as
+                 well as the block dimensions
+    :return: Tuple of (x, y) points used
     """
     #if previous_position is not None:
     #    pygame.draw.polygon(pygame_window, bg_color, previous_position)
