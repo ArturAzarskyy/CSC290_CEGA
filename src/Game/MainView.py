@@ -45,7 +45,8 @@ def run_game():
 
     isRunning = True
     while isRunning:
-        pygame.time.delay(750)# this value will be received from the model
+        pygame.time.delay(game.get_delay())# this value will be received from the model
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 isRunning = False
@@ -65,18 +66,27 @@ def run_game():
         # EXAMPLE CONTINUED
         # we would probably get position in the grid form the model and multiply every coordinate by the size of the block
 
-        previous_position = draw_block(win, previous_position, next_position)
+        #previous_position = draw_block(win, previous_position, next_position)
         # pygame.draw.polygon(win, (255, 0, 0), [(0, curr_y - 40), (160, curr_y - 40), (160, curr_y), (0, curr_y)])
 
-        if curr_y != 800:
-            curr_y += 40
-            print(curr_y) #this functionality will be in model class
+        #if curr_y != 800:
+        #    curr_y += 40
+        #    print(curr_y) #this functionality will be in model class
 
         # example use: draw_end_game(win, game.get_score()) should be called once when the game is over
-        if curr_y == 800:
-            draw_end_game(win, game.get_score())
+        #if curr_y == 800:
+        #    draw_end_game(win, game.get_score())
 
-        next_position = [(0, curr_y - 40), (160, curr_y - 40), (160, curr_y), (0, curr_y)]
+        #next_position = [(0, curr_y - 40), (160, curr_y - 40), (160, curr_y), (0, curr_y)]
+
+
+        #temp = (game.curr_x_pos, game.curr_y_pos)
+
+        previous_position = draw_block(win, previous_position, game)
+        print(game.get_leftmost())
+        game.curr_y_pos += 1
+        #print(game.get_botmost())
+        #previous_position = temp
 
         pygame.display.update()
     # This is just me experimenting with movement of the block down to see how it might work
@@ -84,7 +94,8 @@ def run_game():
 
     pygame.quit()
 
-def draw_block(pygame_window, previous_position, new_position):
+
+def draw_block(pygame_window, old_pos, game):
     """
     This function imitates the effect that the block is falling.
     This is achieved by drawing previous position in color of background.
@@ -93,12 +104,25 @@ def draw_block(pygame_window, previous_position, new_position):
     :param new_position: Array of (x, y) coordinates  going clockwise. Which represent where to draw the block next
     :return: Array of (x, y) points used
     """
-    if previous_position is not None:
-        pygame.draw.polygon(pygame_window, bg_color, previous_position)
-    pygame.draw.polygon(pygame_window, (255,0,0), new_position)
+    #if previous_position is not None:
+    #    pygame.draw.polygon(pygame_window, bg_color, previous_position)
+    #pygame.draw.polygon(pygame_window, (255,0,0), new_position)
+
+    if old_pos is not None:
+        for i in range(len(game.curr_block)):
+            for j in range(len(game.curr_block[0])):
+                if game.curr_block[i][j] != 0:
+                    pygame.draw.rect(pygame_window, bg_color,
+                                     ((old_pos[0] + i) * 40, (old_pos[1] + j) * 40, 40, 40))
+
+    for i in range(len(game.curr_block)):
+        for j in range(len(game.curr_block[0])):
+            if game.curr_block[i][j] != 0:
+                pygame.draw.rect(pygame_window, (255,0,0), ((game.get_leftmost() + i)*40, (game.get_botmost() + j)*40, 40, 40))
+
     draw_grid(pygame_window)
 
-    return new_position
+    return game.get_leftmost(), game.get_botmost()
 
 
 def draw_text(pygame_window, text, x, y):
@@ -143,6 +167,7 @@ def draw_end_game(pygame_window, final_score):
     pygame_window.blit(s, (0,0))
     pygame_window.blit(game_over_text, (game_width/2 - (big_font.size("Game Over")[0]/2), game_height/3))
     pygame_window.blit(score_text, (game_width/2 - (font.size("Final Score: " + str(final_score))[0]/2), game_height/3 + 55))
+
 
 if __name__ == "__main__":
     run_game()

@@ -46,24 +46,34 @@ class MainModel:
         self.height = 24
 
         # The middle of the block, middle right if the block has even width
-        self.curr_x_pos = 5
-        self.curr_y_pos = 21  # The bottom of the block
+        self.curr_x_pos = 2
+        self.curr_y_pos = 2  # The bottom of the block
 
         self.level = 1
         self.score = 0
 
         self.curr_block = random.choice(blocks)
-        self.curr_block_h = len(self.curr_block)
-        self.curr_block_w = len(self.curr_block[0])
+        self.curr_block_h = len(self.curr_block[0])
+        self.curr_block_w = len(self.curr_block)
         # self.curr_block_lowest = self._get_block_lowest()
         # The leftmost position of the block
-        self.curr_block_left = self.curr_x_pos - self.curr_block_w//2
+        #self.curr_block_left = self.curr_x_pos - self.curr_block_w//2
         # The rightmost position of the block
-        self.curr_block_right = self.curr_x_pos + (self.curr_block_w+1)//2
+        #self.curr_block_right = self.curr_x_pos + (self.curr_block_w+1)//2
+
 
         self.next_block = random.choice(blocks)
 
         self.grid = []
+
+    def get_leftmost(self) -> int:
+        return self.curr_x_pos - self.curr_block_w//2
+
+    def get_rightmost(self) -> int:
+        return self.curr_x_pos + (self.curr_block_w + 1) // 2
+
+    def get_botmost(self) -> int:
+        return self.curr_y_pos + (self.curr_block_h+1)//2
 
     def make_grid(self):
         '''
@@ -84,18 +94,18 @@ class MainModel:
         Move the current block 1 grid to the left
         if it is out of bound, ignore it
         """
-        if self.curr_block_left > 0:
+        if self.get_leftmost() > 0:
             self.curr_x_pos -= 1
-            self.curr_block_right += 1
+            #self.curr_block_right += 1
 
     def move_block_right(self) -> None:
         """
         Move the current block 1 grid to the right
         if it is out of bound, ignore it
         """
-        if self.curr_block_right < self.width:
+        if self.get_rightmost() < self.width:
             self.curr_x_pos += 1
-            self.curr_block_right += 1
+            #self.curr_block_right += 1
 
     def get_level(self):
         return self.level
@@ -134,3 +144,5 @@ class MainModel:
         """
         return self.next_block
 
+    def get_delay(self) -> int:
+        return 750
