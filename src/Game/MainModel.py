@@ -40,7 +40,7 @@ blocks = [
 
 
 class MainModel:
-    def __init__(self, width, height):
+    def __init__(self):
 
         self.width = 10
         self.height = 24
@@ -77,7 +77,7 @@ class MainModel:
     def make_grid(self):
         '''
         (DoomFall) -> None
-        Given width, height as 10 and 20 respectively,
+        Given width, height as 10 and 24 respectively,
          create a 2D grid
            '''
 
@@ -118,10 +118,10 @@ class MainModel:
         """
         lst = [0] * self.curr_block_w
         for x in range(self.curr_block_w):
-            y = self.curr_block_h-1
+            y = 0
             while self.curr_block[x][y] == 0:
                 lst[x] += 1
-                y -= 1
+                y += 1
         return lst
 
     def _collision(self) -> bool:
@@ -131,7 +131,7 @@ class MainModel:
         """
         bot = 0
         for x in range(self.get_leftmost(), self.get_rightmost()):
-            if self.grid[self.curr_y_pos-1+self.curr_block_lowest[bot]][x] != 0:
+            if self.get_botmost() == 23:
                 return True
         return False
 
@@ -143,3 +143,12 @@ class MainModel:
 
     def get_delay(self) -> int:
         return max(750//self.level, 17)
+
+    def drop_block(self) -> None:
+        """
+        drop the block to bottom
+        :return:
+        """
+        while not self._collision():
+            self.curr_y_pos += 1
+

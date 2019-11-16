@@ -15,7 +15,7 @@ bg_color = (5, 5, 5)
 
 # We can create a list of shape coordinates
 def run_game():
-    game = MainModel.MainModel(game_width, game_height)
+    game = MainModel.MainModel()
     controller = MainController.MainController(game)
 
 
