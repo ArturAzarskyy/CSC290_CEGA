@@ -55,12 +55,11 @@ class MainModel:
         self.curr_block = random.choice(blocks)
         self.curr_block_h = len(self.curr_block[0])
         self.curr_block_w = len(self.curr_block)
-        # self.curr_block_lowest = self._get_block_lowest()
+        self.curr_block_lowest = self._get_block_lowest()
         # The leftmost position of the block
         #self.curr_block_left = self.curr_x_pos - self.curr_block_w//2
         # The rightmost position of the block
         #self.curr_block_right = self.curr_x_pos + (self.curr_block_w+1)//2
-
 
         self.next_block = random.choice(blocks)
 
@@ -96,7 +95,6 @@ class MainModel:
         """
         if self.get_leftmost() > 0:
             self.curr_x_pos -= 1
-            #self.curr_block_right += 1
 
     def move_block_right(self) -> None:
         """
@@ -105,7 +103,6 @@ class MainModel:
         """
         if self.get_rightmost() < self.width:
             self.curr_x_pos += 1
-            #self.curr_block_right += 1
 
     def get_level(self):
         return self.level
@@ -122,7 +119,7 @@ class MainModel:
         lst = [0] * self.curr_block_w
         for x in range(self.curr_block_w):
             y = self.curr_block_h-1
-            while self.curr_block[y][x] != 0:
+            while self.curr_block[x][y] == 0:
                 lst[x] += 1
                 y -= 1
         return lst
@@ -133,7 +130,7 @@ class MainModel:
         :return: True if there is a collide
         """
         bot = 0
-        for x in range(self.curr_block_left, self.curr_block_right):
+        for x in range(self.get_leftmost(), self.get_rightmost()):
             if self.grid[self.curr_y_pos-1+self.curr_block_lowest[bot]][x] != 0:
                 return True
         return False
@@ -145,4 +142,4 @@ class MainModel:
         return self.next_block
 
     def get_delay(self) -> int:
-        return 750
+        return max(750//self.level, 17)
