@@ -4,14 +4,15 @@ from src.Game import MainController, MainModel
 
 pygame.init()
 
-shape_size = 40
+shape_size = 30
 game_height = shape_size * 20
 game_width = shape_size * 10
-screen_width = 600
+screen_width = 500
 font = pygame.font.SysFont('Agency FB', 30)
 big_font = pygame.font.SysFont('Agency FB', 48)  # Used only for "Game Over"
 bg_color = (5, 5, 5)
 
+colors = {1:(255,0,0), 2:(0,0,255), 3:(0,255,0), 4:(0,255,255), 5:(255,0,255), 6:(255,153,0), 7:(255,255,0)  }
 
 # We can create a list of shape coordinates
 class MainView:
@@ -48,6 +49,8 @@ class MainView:
         while isRunning:
             now = pygame.time.get_ticks()
             if now-self.last >= game.get_delay():
+                if game.is_at_the_bottom():
+                    self.previous_position = None
                 self.last = now
                 game.curr_y_pos += 1# this value will be received from the model
 
@@ -65,7 +68,6 @@ class MainView:
                                     [(game_width + 25, 165), (game_width + 25, 205), (screen_width, 205), (screen_width, 165)])
                 self.draw_text(self.win, str(game.get_level()), game_width+25, 165)
 
-                # EXAMPLE CONTINUED
 
                 self.previous_position = self.draw_block(self.win, self.previous_position, game)
                 # print(game._get_block_lowest())
@@ -112,12 +114,12 @@ class MainView:
                 for j in range(len(game.curr_block[0])):
                     if game.curr_block[i][j] != 0:
                         pygame.draw.rect(pygame_window, bg_color,
-                                         ((old_pos[0] + j) * 40, (old_pos[1] + i) * 40, 40, 40))
+                                         ((old_pos[0] + j) * 30, (old_pos[1] + i) * 30, 30, 30))
 
         for i in range(len(game.curr_block)):
             for j in range(len(game.curr_block[0])):
                 if game.curr_block[i][j] != 0:
-                    pygame.draw.rect(pygame_window, (255,0,0), ((game.get_leftmost() + j)*40, (game.get_botmost() + i)*40, 40, 40))
+                    pygame.draw.rect(pygame_window, colors[game.curr_block[i][j]], ((game.get_leftmost() + j)*30, (game.get_botmost() + i)*30, 30, 30))
 
         self.draw_grid(pygame_window)
 
