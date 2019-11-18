@@ -40,21 +40,22 @@ blocks = [
 
 
 class MainModel:
-    def __init__(self):
+    def __init__(self, view):
 
         self.width = 10
         self.height = 24
+        self.view = view
 
         # The middle of the block, middle right if the block has even width
-        self.curr_x_pos = 2
-        self.curr_y_pos = 2  # The bottom of the block
+        self.curr_x_pos = 5
+        self.curr_y_pos = 0  # The bottom of the block
 
         self.level = 1
         self.score = 0
 
         self.curr_block = random.choice(blocks)
-        self.curr_block_h = len(self.curr_block[0])
-        self.curr_block_w = len(self.curr_block)
+        self.curr_block_h = len(self.curr_block)
+        self.curr_block_w = len(self.curr_block[0])
         self.curr_block_lowest = self._get_block_lowest()
         # The leftmost position of the block
         #self.curr_block_left = self.curr_x_pos - self.curr_block_w//2
@@ -64,6 +65,7 @@ class MainModel:
         self.next_block = random.choice(blocks)
 
         self.grid = []
+        self.make_grid()
 
     def get_leftmost(self) -> int:
         return self.curr_x_pos - self.curr_block_w//2
@@ -72,7 +74,7 @@ class MainModel:
         return self.curr_x_pos + (self.curr_block_w + 1) // 2
 
     def get_botmost(self) -> int:
-        return self.curr_y_pos + (self.curr_block_h+1)//2
+        return self.curr_y_pos #+ (self.curr_block_h+1)//2
 
     def make_grid(self):
         '''
@@ -88,6 +90,16 @@ class MainModel:
 
         self.grid[self.curr_x_pos][self.curr_y_pos] = random.choice(blocks)
 
+    def request_draw(self):
+        if self.curr_y_pos < self.height:
+            self.view.previous_position = self.view.draw_block(self.view.win, self.view.previous_position, self)
+        else:
+            self.curr_block = self.next_block
+            self.next_block = random.choice(blocks)
+            self.curr_x_pos = 5
+            self.curr_y_pos = 0
+
+
     def move_block_left(self) -> None:
         """
         Move the current block 1 grid to the left
@@ -95,6 +107,7 @@ class MainModel:
         """
         if self.get_leftmost() > 0:
             self.curr_x_pos -= 1
+            self.request_draw()
 
     def move_block_right(self) -> None:
         """
@@ -103,6 +116,8 @@ class MainModel:
         """
         if self.get_rightmost() < self.width:
             self.curr_x_pos += 1
+            self.request_draw()
+
 
     def get_level(self):
         return self.level
@@ -116,8 +131,8 @@ class MainModel:
         the block to the lowest point of that column
         :return:
         """
-        lst = [0] * self.curr_block_w
-        for x in range(self.curr_block_w):
+        lst = [0] * self.curr_block_h
+        for x in range(self.curr_block_h):
             y = 0
             while self.curr_block[x][y] == 0:
                 lst[x] += 1
