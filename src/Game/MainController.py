@@ -42,4 +42,4 @@ class MainController:
             self.game.move_block_right()
 
     def _drop_block(self):
-        self.game.drop_block()
+        self.game.drop_dlock_down()

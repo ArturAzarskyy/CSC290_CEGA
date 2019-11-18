@@ -43,7 +43,7 @@ class MainModel:
     def __init__(self, view):
 
         self.width = 10
-        self.height = 24
+        self.height = 20
         self.view = view
 
         # The middle of the block, middle right if the block has even width
@@ -68,12 +68,16 @@ class MainModel:
         self.make_grid()
 
     def get_leftmost(self) -> int:
-        return self.curr_x_pos - self.curr_block_w//2
+        return self.curr_x_pos #- self.curr_block_w//2
 
     def get_rightmost(self) -> int:
-        return self.curr_x_pos + (self.curr_block_w + 1) // 2
+        if self.curr_block == blocks[-1]:
+            return self.curr_x_pos + (self.curr_block_w +2) // 2
+        return self.curr_x_pos + (self.curr_block_w +4) // 2
 
     def get_botmost(self) -> int:
+        if self.curr_block == blocks[-2]:
+            return self.curr_y_pos + 1
         return self.curr_y_pos #+ (self.curr_block_h+1)//2
 
     def make_grid(self):
@@ -94,11 +98,16 @@ class MainModel:
         if self.curr_y_pos < self.height:
             self.view.previous_position = self.view.draw_block(self.view.win, self.view.previous_position, self)
         else:
+            self.is_at_the_bottom()
+
+    def is_at_the_bottom(self):
+        if self.curr_y_pos == self.height -2 :
             self.curr_block = self.next_block
             self.next_block = random.choice(blocks)
             self.curr_x_pos = 5
             self.curr_y_pos = 0
-
+            return True
+        return False
 
     def move_block_left(self) -> None:
         """
@@ -155,6 +164,9 @@ class MainModel:
         :return: next dropping block
         """
         return self.next_block
+
+    def drop_dlock_down(self):
+        self.curr_y_pos = self.height -2
 
     def get_delay(self) -> int:
         return max(750//self.level, 17)
