@@ -40,14 +40,15 @@ blocks = [
 
 
 class MainModel:
-    def __init__(self, width, height):
+    def __init__(self, view):
 
         self.width = 10
-        self.height = 24
+        self.height = 20
+        self.view = view
 
         # The middle of the block, middle right if the block has even width
         self.curr_x_pos = 5
-        self.curr_y_pos = 21  # The bottom of the block
+        self.curr_y_pos = 0  # The bottom of the block
 
         self.level = 1
         self.score = 0
@@ -55,20 +56,34 @@ class MainModel:
         self.curr_block = random.choice(blocks)
         self.curr_block_h = len(self.curr_block)
         self.curr_block_w = len(self.curr_block[0])
-        # self.curr_block_lowest = self._get_block_lowest()
+        self.curr_block_lowest = self._get_block_lowest()
         # The leftmost position of the block
-        self.curr_block_left = self.curr_x_pos - self.curr_block_w//2
+        #self.curr_block_left = self.curr_x_pos - self.curr_block_w//2
         # The rightmost position of the block
-        self.curr_block_right = self.curr_x_pos + (self.curr_block_w+1)//2
+        #self.curr_block_right = self.curr_x_pos + (self.curr_block_w+1)//2
 
         self.next_block = random.choice(blocks)
 
         self.grid = []
+        self.make_grid()
+
+    def get_leftmost(self) -> int:
+        return self.curr_x_pos #- self.curr_block_w//2
+
+    def get_rightmost(self) -> int:
+        if self.curr_block == blocks[-1]:
+            return self.curr_x_pos + (self.curr_block_w +2) // 2
+        return self.curr_x_pos + (self.curr_block_w +4) // 2
+
+    def get_botmost(self) -> int:
+        if self.curr_block == blocks[-2]:
+            return self.curr_y_pos + 1
+        return self.curr_y_pos #+ (self.curr_block_h+1)//2
 
     def make_grid(self):
         '''
         (DoomFall) -> None
-        Given width, height as 10 and 20 respectively,
+        Given width, height as 10 and 24 respectively,
          create a 2D grid
            '''
 
@@ -79,23 +94,39 @@ class MainModel:
 
         self.grid[self.curr_x_pos][self.curr_y_pos] = random.choice(blocks)
 
+    def request_draw(self):
+        if self.curr_y_pos < self.height:
+            self.view.previous_position = self.view.draw_block(self.view.win, self.view.previous_position, self)
+        else:
+            self.is_at_the_bottom()
+
+    def is_at_the_bottom(self):
+        if self.curr_y_pos == self.height -2 :
+            self.curr_block = self.next_block
+            self.next_block = random.choice(blocks)
+            self.curr_x_pos = 5
+            self.curr_y_pos = 0
+            return True
+        return False
+
     def move_block_left(self) -> None:
         """
         Move the current block 1 grid to the left
         if it is out of bound, ignore it
         """
-        if self.curr_block_left > 0:
+        if self.get_leftmost() > 0:
             self.curr_x_pos -= 1
-            self.curr_block_right += 1
+            self.request_draw()
 
     def move_block_right(self) -> None:
         """
         Move the current block 1 grid to the right
         if it is out of bound, ignore it
         """
-        if self.curr_block_right < self.width:
+        if self.get_rightmost() < self.width:
             self.curr_x_pos += 1
-            self.curr_block_right += 1
+            self.request_draw()
+
 
     def get_level(self):
         return self.level
@@ -109,12 +140,12 @@ class MainModel:
         the block to the lowest point of that column
         :return:
         """
-        lst = [0] * self.curr_block_w
-        for x in range(self.curr_block_w):
-            y = self.curr_block_h-1
-            while self.curr_block[y][x] != 0:
+        lst = [0] * self.curr_block_h
+        for x in range(self.curr_block_h):
+            y = 0
+            while self.curr_block[x][y] == 0:
                 lst[x] += 1
-                y -= 1
+                y += 1
         return lst
 
     def _collision(self) -> bool:
@@ -123,8 +154,8 @@ class MainModel:
         :return: True if there is a collide
         """
         bot = 0
-        for x in range(self.curr_block_left, self.curr_block_right):
-            if self.grid[self.curr_y_pos-1+self.curr_block_lowest[bot]][x] != 0:
+        for x in range(self.get_leftmost(), self.get_rightmost()):
+            if self.get_botmost() == 23:
                 return True
         return False
 
@@ -133,4 +164,18 @@ class MainModel:
         :return: next dropping block
         """
         return self.next_block
+
+    def drop_dlock_down(self):
+        self.curr_y_pos = self.height -2
+
+    def get_delay(self) -> int:
+        return max(750//self.level, 17)
+
+    def drop_block(self) -> None:
+        """
+        drop the block to bottom
+        :return:
+        """
+        while not self._collision():
+            self.curr_y_pos += 1
 
