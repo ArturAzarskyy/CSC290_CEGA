@@ -109,6 +109,21 @@ class MainModel:
             return True
         return False
 
+    def can_move_down(self):
+        if self.is_at_the_bottom():
+            return False
+
+        for i in range(len(self.curr_block)):
+            for j in range(len(self.curr_block[0])):
+                if self.curr_block[i][j] != 0:
+                    if self.grid[self.get_botmost()+1+i][self.get_leftmost()+j] != 0:
+                        self.curr_block = self.next_block
+                        self.next_block = random.choice(blocks)
+                        self.curr_x_pos = 5
+                        self.curr_y_pos = 0
+                        return False
+        return True
+
     def move_block_left(self) -> None:
         """
         Move the current block 1 grid to the left
