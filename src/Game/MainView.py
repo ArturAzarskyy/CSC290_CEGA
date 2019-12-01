@@ -49,7 +49,9 @@ class MainView:
         while isRunning:
             now = pygame.time.get_ticks()
             if now-self.last >= game.get_delay():
+                info = (game.get_leftmost(), game.get_botmost(), game.curr_block)
                 if game.is_at_the_bottom():
+                    game.place_block_in_grid(info)
                     self.previous_position = None
                 self.last = now
                 game.curr_y_pos += 1# this value will be received from the model

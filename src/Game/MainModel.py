@@ -90,9 +90,9 @@ class MainModel:
         for i in range(self.height):
             self.grid.append([])
             for j in range(self.width):
-                self.grid[i].append('[0]')
+                self.grid[i].append(0)
 
-        self.grid[self.curr_x_pos][self.curr_y_pos] = random.choice(blocks)
+        #self.grid[self.curr_x_pos][self.curr_y_pos] = random.choice(blocks)
 
     def request_draw(self):
         if self.curr_y_pos < self.height:
@@ -126,6 +126,16 @@ class MainModel:
         if self.get_rightmost() < self.width:
             self.curr_x_pos += 1
             self.request_draw()
+
+    def place_block_in_grid(self, info) -> None:
+        """
+        Info is a tuple of the x pos, y pos and block.
+        This method places the given block at the (x,y) position on the grid
+        """
+        for i in range(len(info[2])):
+            for j in range(len(info[2][0])):
+                if info[2][i][j] != 0:
+                    self.grid[info[1]+i][info[0]+j] = info[2][i][j]
 
 
     def get_level(self):
