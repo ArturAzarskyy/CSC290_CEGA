@@ -102,7 +102,7 @@ class MainModel:
 
     def is_at_the_bottom(self):
         if self.curr_y_pos == self.height -2 :
-            self.reset_block()
+            #self.reset_block()
             return True
         return False
 
@@ -120,7 +120,7 @@ class MainModel:
             for j in range(len(self.curr_block[0])):
                 if self.curr_block[i][j] != 0:
                     if self.grid[self.get_botmost()+1+i][self.get_leftmost()+j] != 0:
-                        self.reset_block()
+                        #self.reset_block()
                         return False
         return True
 
@@ -151,7 +151,6 @@ class MainModel:
             for j in range(len(info[2][0])):
                 if info[2][i][j] != 0:
                     self.grid[info[1]+i][info[0]+j] = info[2][i][j]
-
 
     def get_level(self):
         return self.level
@@ -190,9 +189,6 @@ class MainModel:
         """
         return self.next_block
 
-    def drop_dlock_down(self):
-        self.curr_y_pos = self.height -2
-
     def get_delay(self) -> int:
         return max(750//self.level, 17)
 
@@ -201,6 +197,6 @@ class MainModel:
         drop the block to bottom
         :return:
         """
-        while not self._collision():
+        while self.can_move_down():
             self.curr_y_pos += 1
 
