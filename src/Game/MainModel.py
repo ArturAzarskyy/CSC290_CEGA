@@ -90,9 +90,9 @@ class MainModel:
         for i in range(self.height):
             self.grid.append([])
             for j in range(self.width):
-                self.grid[i].append('[0]')
+                self.grid[i].append(0)
 
-        self.grid[self.curr_x_pos][self.curr_y_pos] = random.choice(blocks)
+        #self.grid[self.curr_x_pos][self.curr_y_pos] = random.choice(blocks)
 
     def request_draw(self):
         if self.curr_y_pos < self.height:
@@ -100,21 +100,75 @@ class MainModel:
         else:
             self.is_at_the_bottom()
 
+    def get_full_lines(self) -> list:
+        """
+        Returns a list of row in which there is a full line
+        """
+        ans = []
+        for row in range(len(self.grid)):
+            row_full = True
+            for square in self.grid[row]:
+                if square == 0:
+                    row_full = False
+                    break
+            if row_full:
+                ans.append(row)
+        return ans
+
     def is_at_the_bottom(self):
         if self.curr_y_pos == self.height -2 :
-            self.curr_block = self.next_block
-            self.next_block = random.choice(blocks)
-            self.curr_x_pos = 5
-            self.curr_y_pos = 0
+            #self.reset_block()
             return True
         return False
+
+    def reset_block(self):
+        self.curr_block = self.next_block
+        self.next_block = random.choice(blocks)
+        self.curr_x_pos = 5 - len(self.curr_block[0])//2
+        self.curr_y_pos = -1
+
+    def can_move_down(self):
+        if self.is_at_the_bottom():
+            return False
+
+        for i in range(len(self.curr_block)):
+            for j in range(len(self.curr_block[0])):
+                if self.curr_block[i][j] != 0:
+                    if self.grid[self.get_botmost()+1+i][self.get_leftmost()+j] != 0:
+                        #self.reset_block()
+                        return False
+        return True
+
+    def can_move_left(self):
+        if not self.get_leftmost() > 0:
+            return False
+
+        for i in range(len(self.curr_block)):
+            for j in range(len(self.curr_block[0])):
+                if self.curr_block[i][j] != 0:
+                    if self.grid[self.get_botmost()+i][self.get_leftmost()+j-1]\
+                            != 0:
+                        return False
+        return True
+
+    def can_move_right(self):
+        if not self.get_rightmost() < self.width:
+            return False
+
+        for i in range(len(self.curr_block)):
+            for j in range(len(self.curr_block[0])):
+                if self.curr_block[i][j] != 0:
+                    if self.grid[self.get_botmost()+i][self.get_leftmost()+j+1]\
+                            != 0:
+                        return False
+        return True
 
     def move_block_left(self) -> None:
         """
         Move the current block 1 grid to the left
         if it is out of bound, ignore it
         """
-        if self.get_leftmost() > 0:
+        if self.can_move_left():
             self.curr_x_pos -= 1
             self.request_draw()
 
@@ -123,10 +177,19 @@ class MainModel:
         Move the current block 1 grid to the right
         if it is out of bound, ignore it
         """
-        if self.get_rightmost() < self.width:
+        if self.can_move_right():
             self.curr_x_pos += 1
             self.request_draw()
 
+    def place_block_in_grid(self, info) -> None:
+        """
+        Info is a tuple of the x pos, y pos and block.
+        This method places the given block at the (x,y) position on the grid
+        """
+        for i in range(len(info[2])):
+            for j in range(len(info[2][0])):
+                if info[2][i][j] != 0:
+                    self.grid[info[1]+i][info[0]+j] = info[2][i][j]
 
     def get_level(self):
         return self.level
@@ -165,9 +228,6 @@ class MainModel:
         """
         return self.next_block
 
-    def drop_dlock_down(self):
-        self.curr_y_pos = self.height -2
-
     def get_delay(self) -> int:
         return max(750//self.level, 17)
 
@@ -176,6 +236,6 @@ class MainModel:
         drop the block to bottom
         :return:
         """
-        while not self._collision():
+        while self.can_move_down():
             self.curr_y_pos += 1
 
