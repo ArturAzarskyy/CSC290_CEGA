@@ -102,12 +102,15 @@ class MainModel:
 
     def is_at_the_bottom(self):
         if self.curr_y_pos == self.height -2 :
-            self.curr_block = self.next_block
-            self.next_block = random.choice(blocks)
-            self.curr_x_pos = 5
-            self.curr_y_pos = 0
+            self.reset_block()
             return True
         return False
+
+    def reset_block(self):
+        self.curr_block = self.next_block
+        self.next_block = random.choice(blocks)
+        self.curr_x_pos = 5 - len(self.curr_block[0])//2
+        self.curr_y_pos = -1
 
     def can_move_down(self):
         if self.is_at_the_bottom():
@@ -117,10 +120,7 @@ class MainModel:
             for j in range(len(self.curr_block[0])):
                 if self.curr_block[i][j] != 0:
                     if self.grid[self.get_botmost()+1+i][self.get_leftmost()+j] != 0:
-                        self.curr_block = self.next_block
-                        self.next_block = random.choice(blocks)
-                        self.curr_x_pos = 5
-                        self.curr_y_pos = 0
+                        self.reset_block()
                         return False
         return True
 
