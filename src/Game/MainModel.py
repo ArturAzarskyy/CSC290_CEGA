@@ -100,6 +100,21 @@ class MainModel:
         else:
             self.is_at_the_bottom()
 
+    def get_full_lines(self) -> list:
+        """
+        Returns a list of row in which there is a full line
+        """
+        ans = []
+        for row in range(len(self.grid)):
+            row_full = True
+            for square in self.grid[row]:
+                if square == 0:
+                    row_full = False
+                    break
+            if row_full:
+                ans.append(row)
+        return ans
+
     def is_at_the_bottom(self):
         if self.curr_y_pos == self.height -2 :
             #self.reset_block()
