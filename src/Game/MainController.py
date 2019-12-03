@@ -15,15 +15,15 @@ class MainController:
         :return: None
         """
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
+            if event.key == pygame.K_a or event.key == pygame.K_LEFT:
                 self._move(-1)
-            elif event.key == pygame.K_d:
+            elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                 self._move(1)
             elif event.key == pygame.K_q:
                 self._rotate(-1)
             elif event.key == pygame.K_e:
                 self._rotate(1)
-            elif event.key == pygame.K_SPACE:
+            elif event.key == pygame.K_SPACE or event.key == pygame.K_DOWN:
                 self._drop_block()
         return None
 
