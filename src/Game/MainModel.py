@@ -100,6 +100,17 @@ class MainModel:
         else:
             self.is_at_the_bottom()
 
+    def can_spawn_block(self) -> bool:
+        """
+        Returns if the game is still playable, or if it should be ended
+        """
+        #print(self.row[0])
+        for i in range(0, 2):
+            for j in range(4, 8):
+                if self.grid[i][j] != 0:
+                    return False
+        return True
+
     def get_full_lines(self) -> list:
         """
         Returns a list of row in which there is a full line
