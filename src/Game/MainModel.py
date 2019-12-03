@@ -124,12 +124,36 @@ class MainModel:
                         return False
         return True
 
+    def can_move_left(self):
+        if not self.get_leftmost() > 0:
+            return False
+
+        for i in range(len(self.curr_block)):
+            for j in range(len(self.curr_block[0])):
+                if self.curr_block[i][j] != 0:
+                    if self.grid[self.get_botmost()+i][self.get_leftmost()+j-1]\
+                            != 0:
+                        return False
+        return True
+
+    def can_move_right(self):
+        if not self.get_rightmost() < self.width:
+            return False
+
+        for i in range(len(self.curr_block)):
+            for j in range(len(self.curr_block[0])):
+                if self.curr_block[i][j] != 0:
+                    if self.grid[self.get_botmost()+i][self.get_leftmost()+j+1]\
+                            != 0:
+                        return False
+        return True
+
     def move_block_left(self) -> None:
         """
         Move the current block 1 grid to the left
         if it is out of bound, ignore it
         """
-        if self.get_leftmost() > 0:
+        if self.can_move_left():
             self.curr_x_pos -= 1
             self.request_draw()
 
@@ -138,7 +162,7 @@ class MainModel:
         Move the current block 1 grid to the right
         if it is out of bound, ignore it
         """
-        if self.get_rightmost() < self.width:
+        if self.can_move_right():
             self.curr_x_pos += 1
             self.request_draw()
 
