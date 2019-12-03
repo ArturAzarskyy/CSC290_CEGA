@@ -12,6 +12,7 @@ font = pygame.font.SysFont('Agency FB', 30)
 big_font = pygame.font.SysFont('Agency FB', 48)  # Used only for "Game Over"
 bg_color = (5, 5, 5)
 
+
 colors = {1:(255,0,0), 2:(0,0,255), 3:(0,255,0), 4:(0,255,255), 5:(255,0,255), 6:(255,153,0), 7:(255,255,0)  }
 
 # We can create a list of shape coordinates
@@ -19,7 +20,7 @@ class MainView:
     def run_game(self):
         game = MainModel.MainModel(self)
         controller = MainController.MainController(game)
-
+        end_drawn = False
 
         # EXAMPLE OF A BLOCK FALLING
         #From here
@@ -52,9 +53,10 @@ class MainView:
                 if not game.can_move_down():
                     game.place_block_in_grid((game.get_leftmost(), game.get_botmost(), game.curr_block))
                     self.previous_position = None
-                    game.reset_block()
-                self.last = now
-                game.curr_y_pos += 1# this value will be received from the model
+                    if game.can_spawn_block():
+                        game.reset_block()
+                    else:
+                        game.is_game_over = True
 
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
@@ -62,18 +64,24 @@ class MainView:
                     else:
                         controller.read_event(event)
 
-                # update score
-                pygame.draw.polygon(self.win, bg_color,
-                                    [(game_width + 25, 45), (game_width + 25, 85), (screen_width, 85), (screen_width, 45)])
-                self.draw_text(self.win, str(game.get_score()), game_width+25, 45)
-                pygame.draw.polygon(self.win, bg_color,
-                                    [(game_width + 25, 165), (game_width + 25, 205), (screen_width, 205), (screen_width, 165)])
-                self.draw_text(self.win, str(game.get_level()), game_width+25, 165)
+                if not game.is_game_over:
+                    self.last = now
 
-
-                self.previous_position = self.draw_block(self.win, self.previous_position, game)
+                    game.curr_y_pos += 1# this value will be received from the model
+                    # update score
+                    pygame.draw.polygon(self.win, bg_color,
+                                        [(game_width + 25, 45), (game_width + 25, 85), (screen_width, 85),
+                                         (screen_width, 45)])
+                    self.draw_text(self.win, str(game.get_score()), game_width + 25, 45)
+                    pygame.draw.polygon(self.win, bg_color,
+                                        [(game_width + 25, 165), (game_width + 25, 205), (screen_width, 205),
+                                         (screen_width, 165)])
+                    self.draw_text(self.win, str(game.get_level()), game_width + 25, 165)
+                    self.previous_position = self.draw_block(self.win, self.previous_position, game)
+                elif not end_drawn:
+                    self.draw_end_game(self.win, game.get_score())
+                    end_drawn = True
                 # print(game._get_block_lowest())
-                #TODO: is block at the bottom  then call function in MainModel To set that block in grid an to use next block
             else:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:

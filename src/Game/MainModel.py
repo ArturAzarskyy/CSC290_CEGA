@@ -52,6 +52,7 @@ class MainModel:
 
         self.level = 1
         self.score = 0
+        self.is_game_over = False
 
         self.curr_block = random.choice(blocks)
         self.curr_block_h = len(self.curr_block)
