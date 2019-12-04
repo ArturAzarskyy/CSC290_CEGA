@@ -33,7 +33,7 @@ The controls for DOOMFALL are quite simple:
 
 # Documentation
 - #### MainView:
- -
+   - `draw_block(self, pygame_window, old_pos, game)`
 - #### MainModel:
  Main model saves all of the blocks in `self.grid`, models is also responsible for attempting to move and rotate the blocks as well as keeping the track of the score and level of the game. If model has ability to rotate or move the block it will request [MainView](https://github.com/ArturAzarskyy/DOOMFALL#MainView) to redraw the block.
  - move_block_left(self):
