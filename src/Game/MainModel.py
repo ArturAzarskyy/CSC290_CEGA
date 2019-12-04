@@ -1,6 +1,6 @@
 import pygame
 import random
-
+from copy import deepcopy
 
 blocks = [
 
@@ -57,12 +57,6 @@ class MainModel:
         self.curr_block = random.choice(blocks)
         self.curr_block_h = len(self.curr_block)
         self.curr_block_w = len(self.curr_block[0])
-        self.curr_block_lowest = self._get_block_lowest()
-        # The leftmost position of the block
-        #self.curr_block_left = self.curr_x_pos - self.curr_block_w//2
-        # The rightmost position of the block
-        #self.curr_block_right = self.curr_x_pos + (self.curr_block_w+1)//2
-
         self.next_block = random.choice(blocks)
 
         self.grid = []
@@ -146,7 +140,7 @@ class MainModel:
         for i in range(len(self.curr_block)):
             for j in range(len(self.curr_block[0])):
                 if self.curr_block[i][j] != 0:
-                    if self.grid[self.get_botmost()+1+i][self.get_leftmost()+j] != 0:
+                    if self.get_botmost()+1+i >= len(self.grid) or self.grid[self.get_botmost()+1+i][self.get_leftmost()+j] != 0:
                         #self.reset_block()
                         return False
         return True
@@ -251,3 +245,22 @@ class MainModel:
         while self.can_move_down():
             self.curr_y_pos += 1
 
+    def rotate_right(self):
+        h = len(self.curr_block)
+        w = len(self.curr_block[0])
+
+        temp = [0] * h
+        ans = [temp] * w
+
+        for i in range(len(self.curr_block[0])):
+            temp_row = [0] * h
+
+            for j in range(len(self.curr_block)):
+                temp_row[j] = self.curr_block[j][i]
+            ans[i] = temp_row[::-1]
+
+        self.curr_y_pos += len(ans) - self.curr_block_h
+        self.curr_x_pos += len(ans[0]) - self.curr_block_w # not sure about this line
+        self.curr_block_w = len(ans[0])
+        self.curr_block_h = len(ans)
+        self.curr_block = deepcopy(ans)
