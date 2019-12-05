@@ -29,12 +29,14 @@ class MainController:
 
 
     def _rotate(self, direction):
-        # if direction == -1:
-            # self.game.move_block_left()
-        # else:
-            # self.game.move_block_right()
-        if self.game.can_rotate_right():
-            self.game.rotate_right()
+        if direction == -1:
+            if self.game.can_rotate_left():
+                self.game.rotate_right()
+                self.game.rotate_right()
+                self.game.rotate_right()
+        else:
+            if self.game.can_rotate_right():
+                self.game.rotate_right()
 
     def _move(self, direction):
         if direction == -1:
