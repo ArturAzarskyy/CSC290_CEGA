@@ -43,7 +43,7 @@ The controls for DOOMFALL are quite simple:
    - draw_end_game(self, pygame_window, final_score):
      - Draw a semi-transparent overlay ontop of the last screen, and display the end game information to the player
 - #### MainModel:
-  Main model saves all of the blocks in `self.grid`, models is also responsible for attempting to move and rotate the blocks as well as keeping the track of the score and level of the game. If model has ability to rotate or move the block it will request [MainView](https://github.com/ArturAzarskyy/DOOMFALL#MainView) to redraw the block.
+  Main model saves all of the blocks in `self.grid`, models is also responsible for attempting to move and rotate the blocks as well as keeping the track of the score and level of the game. If model has ability to rotate or move the block it will request [MainView](https://github.com/ArturAzarskyy/DOOMFALL####MainView) to redraw the block.
   - get_leftmost(self):
     - Returns the leftmost x coordinate.
 
@@ -63,8 +63,8 @@ The controls for DOOMFALL are quite simple:
    - move_block_right(self):
       - Attempts the movement of the block to the right, if it can be successfully moved the function then increases the `self.curr_x_pos` by 1.
    - request_draw(self):
-      - If block did't reach the bottom of the grid it will request  [MainView](https://github.com/ArturAzarskyy/DOOMFALL#MainView) to redraw the block.
-	 - If block at the bottom of the grid [MainModel](https://github.com/ArturAzarskyy/DOOMFALL#MainModel) `self.is_at_the_bottom()`
+      - If block did't reach the bottom of the grid it will request  [MainView](https://github.com/ArturAzarskyy/DOOMFALL####MainView) to redraw the block.
+	 - If block at the bottom of the grid [MainModel](https://github.com/ArturAzarskyy/DOOMFALL####MainModel) `self.is_at_the_bottom()`
    - place_block_in_grid(self, info):
      - This method places the given block at the (x,y) position on the grid. Info is a tuple of the x pos, y pos and block.
    - drop_block(self):
@@ -72,7 +72,7 @@ The controls for DOOMFALL are quite simple:
 
 
 - #### MainController:
-  MainController is responsible for requesting specific actions from the [MainModel](https://github.com/ArturAzarskyy/DOOMFALL#MainModel)
+  MainController is responsible for requesting specific actions from the [MainModel](https://github.com/ArturAzarskyy/DOOMFALL####MainModel)
    - read_event(self, `event`):
      - `event`: pygame `event` which was ditected(Ex. mose button pressed, 'A' pressed)
    - \_rotate(self, `direction`):
@@ -92,9 +92,9 @@ The controls for DOOMFALL are quite simple:
  
  # Contributions
  - Daniel Apushkinsky:
- 	- In this README I had created the DOOMFALL header & short description, part of the navigation, game description, controls, added one screenshot, and added some imformation to Documentation. Throughout the development of the game I have added a multitude of methods: `can_spawn_block()`, `get_full_lines()`, `can_move_down()`, `reset_block()`, `place_block_in_grid()`, `draw_block`() (w/ Artur), `draw_end_game()`, `drop_block` controller and `draw_background()`, and made appropriate changes to our `run_game()` method as new methods were created.
+ 	- In this README I had created the DOOMFALL header & short description, part of the navigation, game description, controls, added one screenshot, and added some imformation to Documentation. Throughout the development of the game I have added a multitude of methods: `can_spawn_block()`, `rotate_right()`, `can_rotate_right()`, `get_full_lines()`, `can_move_down()`, `reset_block()`, `place_block_in_grid()`, `draw_block`() (w/ Artur), `draw_end_game()`, `drop_block` controller and `draw_background()`, and made appropriate changes to our `run_game()` method as new methods were created.
  - Artur Azarskyy:
- 	-
+ 	- In README I filled out MainCotroller documentation as well as documentaion for `move_block_left`, `move_block_right`, `request_draw`. I also generated licence and added licence fields into the file, as well as auhtors. In the codebase I created general archetecture of the  code, I also setted up connections between MainModel, MainView and MainCotroller and updated the archetecture during development. Me and Daniel created `draw_block()`, I created `_move(self, direction)`, `_rotate(self, direction)`, `read_event(self, event)` and participated in making `_rotate(direction)` with Daniel in [MainController](https://github.com/ArturAzarskyy/DOOMFALL####MainController). In [MainModel](https://github.com/ArturAzarskyy/DOOMFALL####MainModel) i create functions `is_at_the_bottom(self)`, ` request_draw(self)`, and modified `get_leftmost(self)`, `get_rightmost(self)`.
  - Abdul Aleem:
  	-
  - Chi Fung Chan:
