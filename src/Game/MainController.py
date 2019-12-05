@@ -33,7 +33,8 @@ class MainController:
             # self.game.move_block_left()
         # else:
             # self.game.move_block_right()
-        self.game.rotate_right()
+        if self.game.can_rotate_right():
+            self.game.rotate_right()
 
     def _move(self, direction):
         if direction == -1:

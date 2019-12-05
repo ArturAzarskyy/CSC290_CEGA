@@ -245,6 +245,23 @@ class MainModel:
         while self.can_move_down():
             self.curr_y_pos += 1
 
+    def can_rotate_right(self):
+        self.rotate_right()
+
+        for i in range(len(self.curr_block)):
+            for j in range(len(self.curr_block[0])):
+                if self.curr_block[i][j] != 0:
+                    if self.get_botmost() + i < 20 and self.get_leftmost() + j < 10 and self.grid[self.get_botmost() + i][self.get_leftmost() + j] != 0:
+                        self.rotate_right()
+                        self.rotate_right()
+                        self.rotate_right()
+                        return False
+        self.rotate_right()
+        self.rotate_right()
+        self.rotate_right()
+        return True
+
+
     def rotate_right(self):
         h = len(self.curr_block)
         w = len(self.curr_block[0])
@@ -259,8 +276,8 @@ class MainModel:
                 temp_row[j] = self.curr_block[j][i]
             ans[i] = temp_row[::-1]
 
-        self.curr_y_pos += len(ans) - self.curr_block_h
-        self.curr_x_pos += len(ans[0]) - self.curr_block_w # not sure about this line
+        # self.curr_y_pos -= 1
+        # self.curr_x_pos += (self.curr_block_w - len(ans[0])) // 2
         self.curr_block_w = len(ans[0])
         self.curr_block_h = len(ans)
         self.curr_block = deepcopy(ans)

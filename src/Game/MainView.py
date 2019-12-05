@@ -1,5 +1,5 @@
 import pygame
-
+from copy import deepcopy
 from src.Game import MainController, MainModel
 
 pygame.init()
@@ -120,9 +120,9 @@ class MainView:
         #pygame.draw.polygon(pygame_window, (255,0,0), new_position)
         # pygame.draw.rect(pygame_window, (255,0,0), (0,0,40,40))
         if old_pos is not None:
-            for i in range(len(game.curr_block)):
-                for j in range(len(game.curr_block[0])):
-                    if game.curr_block[i][j] != 0:
+            for i in range(len(old_pos[2])):
+                for j in range(len(old_pos[2][0])):
+                    if old_pos[2][i][j] != 0:
                         pygame.draw.rect(pygame_window, bg_color,
                                          ((old_pos[0] + j) * 30, (old_pos[1] + i) * 30, 30, 30))
 
@@ -133,7 +133,7 @@ class MainView:
 
         self.draw_grid(pygame_window)
 
-        return game.get_leftmost(), game.get_botmost()
+        return game.get_leftmost(), game.get_botmost(), deepcopy(game.curr_block)
 
 
     def draw_text(self,pygame_window, text, x, y):
