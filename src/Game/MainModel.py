@@ -1,6 +1,6 @@
 import pygame
 import random
-
+from copy import deepcopy
 
 blocks = [
 
@@ -52,16 +52,11 @@ class MainModel:
 
         self.level = 1
         self.score = 0
+        self.is_game_over = False
 
         self.curr_block = random.choice(blocks)
         self.curr_block_h = len(self.curr_block)
         self.curr_block_w = len(self.curr_block[0])
-        self.curr_block_lowest = self._get_block_lowest()
-        # The leftmost position of the block
-        #self.curr_block_left = self.curr_x_pos - self.curr_block_w//2
-        # The rightmost position of the block
-        #self.curr_block_right = self.curr_x_pos + (self.curr_block_w+1)//2
-
         self.next_block = random.choice(blocks)
 
         self.grid = []
@@ -100,6 +95,17 @@ class MainModel:
         else:
             self.is_at_the_bottom()
 
+    def can_spawn_block(self) -> bool:
+        """
+        Returns if the game is still playable, or if it should be ended
+        """
+        #print(self.row[0])
+        for i in range(0, 2):
+            for j in range(4, 8):
+                if self.grid[i][j] != 0:
+                    return False
+        return True
+
     def get_full_lines(self) -> list:
         """
         Returns a list of row in which there is a full line
@@ -134,12 +140,15 @@ class MainModel:
         for i in range(len(self.curr_block)):
             for j in range(len(self.curr_block[0])):
                 if self.curr_block[i][j] != 0:
-                    if self.grid[self.get_botmost()+1+i][self.get_leftmost()+j] != 0:
+                    if self.get_botmost()+1+i >= len(self.grid) or self.grid[self.get_botmost()+1+i][self.get_leftmost()+j] != 0:
                         #self.reset_block()
                         return False
         return True
 
-    def can_move_left(self):
+    def _can_move_left(self):
+        """
+        :return: if the block can move left
+        """
         if not self.get_leftmost() > 0:
             return False
 
@@ -151,7 +160,10 @@ class MainModel:
                         return False
         return True
 
-    def can_move_right(self):
+    def _can_move_right(self):
+        """
+        :return: if the block can move right
+        """
         if not self.get_rightmost() < self.width:
             return False
 
@@ -168,7 +180,7 @@ class MainModel:
         Move the current block 1 grid to the left
         if it is out of bound, ignore it
         """
-        if self.can_move_left():
+        if self._can_move_left():
             self.curr_x_pos -= 1
             self.request_draw()
 
@@ -177,7 +189,7 @@ class MainModel:
         Move the current block 1 grid to the right
         if it is out of bound, ignore it
         """
-        if self.can_move_right():
+        if self._can_move_right():
             self.curr_x_pos += 1
             self.request_draw()
 
@@ -197,31 +209,6 @@ class MainModel:
     def get_score(self):
         return self.score
 
-    def _get_block_lowest(self) -> list:
-        """
-        get a list of relative position of each column from the lowest point of
-        the block to the lowest point of that column
-        :return:
-        """
-        lst = [0] * self.curr_block_h
-        for x in range(self.curr_block_h):
-            y = 0
-            while self.curr_block[x][y] == 0:
-                lst[x] += 1
-                y += 1
-        return lst
-
-    def _collision(self) -> bool:
-        """
-        determine if the block collide with the floor or another block
-        :return: True if there is a collide
-        """
-        bot = 0
-        for x in range(self.get_leftmost(), self.get_rightmost()):
-            if self.get_botmost() == 23:
-                return True
-        return False
-
     def get_next_block(self) -> list:
         """
         :return: next dropping block
@@ -238,4 +225,64 @@ class MainModel:
         """
         while self.can_move_down():
             self.curr_y_pos += 1
+
+    def can_rotate_right(self):
+        """
+        Returns True if rotation to the right is possible
+        """
+        self.rotate_right()
+
+        for i in range(len(self.curr_block)):
+            for j in range(len(self.curr_block[0])):
+                if self.curr_block[i][j] != 0:
+                    if self.get_botmost() + i < 20 and self.get_leftmost() + j < 10 and self.grid[self.get_botmost() + i][self.get_leftmost() + j] != 0:
+                        self.rotate_right()
+                        self.rotate_right()
+                        self.rotate_right()
+                        return False
+        self.rotate_right()
+        self.rotate_right()
+        self.rotate_right()
+        return True
+
+    def rotate_right(self):
+        """
+        Rotates current block to the right
+        """""
+        h = len(self.curr_block)
+        w = len(self.curr_block[0])
+
+        temp = [0] * h
+        ans = [temp] * w
+
+        for i in range(len(self.curr_block[0])):
+            temp_row = [0] * h
+
+            for j in range(len(self.curr_block)):
+                temp_row[j] = self.curr_block[j][i]
+            ans[i] = temp_row[::-1]
+
+        # self.curr_y_pos -= 1
+        # self.curr_x_pos += (self.curr_block_w - len(ans[0])) // 2
+        self.curr_block_w = len(ans[0])
+        self.curr_block_h = len(ans)
+        self.curr_block = deepcopy(ans)
+
+    def can_rotate_left(self):
+        """
+        Returns True if rotation to the right is possible
+        """
+        self.rotate_right()
+        self.rotate_right()
+        self.rotate_right()
+
+        for i in range(len(self.curr_block)):
+            for j in range(len(self.curr_block[0])):
+                if self.curr_block[i][j] != 0:
+                    if self.get_botmost() + i < 20 and self.get_leftmost() + j < 10 and \
+                            self.grid[self.get_botmost() + i][self.get_leftmost() + j] != 0:
+                        self.rotate_right()
+                        return False
+        self.rotate_right()
+        return True
 
