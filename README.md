@@ -58,6 +58,10 @@ The controls for DOOMFALL are quite simple:
     - Return a list of rows in which there is a full line
   - reset_block(self):
     - Reset the current block to its starting position (essentially spawning a new block)
+  - _can_move_left(self):
+     - check if the block can move left
+  - _can_move_right(self):
+     - check if the block can move right
   - move_block_left(self):
      - Attempts the movement of the block to the left, if it can be successfully moved the function then decreases the `self.curr_x_pos` by 1.
    - move_block_right(self):

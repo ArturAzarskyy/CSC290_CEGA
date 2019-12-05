@@ -145,7 +145,10 @@ class MainModel:
                         return False
         return True
 
-    def can_move_left(self):
+    def _can_move_left(self):
+        """
+        :return: if the block can move left
+        """
         if not self.get_leftmost() > 0:
             return False
 
@@ -157,7 +160,10 @@ class MainModel:
                         return False
         return True
 
-    def can_move_right(self):
+    def _can_move_right(self):
+        """
+        :return: if the block can move right
+        """
         if not self.get_rightmost() < self.width:
             return False
 
@@ -174,7 +180,7 @@ class MainModel:
         Move the current block 1 grid to the left
         if it is out of bound, ignore it
         """
-        if self.can_move_left():
+        if self._can_move_left():
             self.curr_x_pos -= 1
             self.request_draw()
 
@@ -183,7 +189,7 @@ class MainModel:
         Move the current block 1 grid to the right
         if it is out of bound, ignore it
         """
-        if self.can_move_right():
+        if self._can_move_right():
             self.curr_x_pos += 1
             self.request_draw()
 
@@ -202,31 +208,6 @@ class MainModel:
 
     def get_score(self):
         return self.score
-
-    def _get_block_lowest(self) -> list:
-        """
-        get a list of relative position of each column from the lowest point of
-        the block to the lowest point of that column
-        :return:
-        """
-        lst = [0] * self.curr_block_h
-        for x in range(self.curr_block_h):
-            y = 0
-            while self.curr_block[x][y] == 0:
-                lst[x] += 1
-                y += 1
-        return lst
-
-    def _collision(self) -> bool:
-        """
-        determine if the block collide with the floor or another block
-        :return: True if there is a collide
-        """
-        bot = 0
-        for x in range(self.get_leftmost(), self.get_rightmost()):
-            if self.get_botmost() == 23:
-                return True
-        return False
 
     def get_next_block(self) -> list:
         """
