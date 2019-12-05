@@ -10,6 +10,7 @@ Tetris insipired game created in `Python` with the help of `pygame`
 - [Installation](https://github.com/ArturAzarskyy/DOOMFALL#Installation)
 - [Documentation](https://github.com/ArturAzarskyy/DOOMFALL#Documentation)
 - [Authors](https://github.com/ArturAzarskyy/DOOMFALL#Authors)
+- [Contributions](https://github.com/ArturAzarskyy/DOOMFALL#Contributions)
 - [License](https://github.com/ArturAzarskyy/DOOMFALL#License)
 
 # Game Description
@@ -33,9 +34,30 @@ The controls for DOOMFALL are quite simple:
 
 # Documentation
 - #### MainView:
-   - `draw_block(self, pygame_window, old_pos, game)`
+   - draw_block(self, pygame_window, old_pos, game):
+     - Draw the current block in the given `pygame_window`
+   - draw_text(self,pygame_window, text, x, y):
+     - Draw text at the given (x,y) position
+   - draw_grid(self, pygame_window):
+     - Draw the white vertical and horizantal border lines (`grid`)
+   - draw_end_game(self, pygame_window, final_score):
+     - Draw a semi-transparent overlay ontop of the last screen, and display the end game information to the player
 - #### MainModel:
   Main model saves all of the blocks in `self.grid`, models is also responsible for attempting to move and rotate the blocks as well as keeping the track of the score and level of the game. If model has ability to rotate or move the block it will request [MainView](https://github.com/ArturAzarskyy/DOOMFALL#MainView) to redraw the block.
+  - get_leftmost(self):
+    - Returns the leftmost x coordinate.
+
+  - get_rightmost(self):
+     - Returns the right-most x coordinate.
+     
+  - get_botmost(self):
+    - Returns the y-coord of the bottom of the falling block.
+  - can_spawn_block(self):
+    - Returns a boolean if a new block has the space to be spawned
+  - get_full_lines(self):
+    - Return a list of rows in which there is a full line
+  - reset_block(self):
+    - Reset the current block to its starting position (essentially spawning a new block)
   - move_block_left(self):
      - Attempts the movement of the block to the left, if it can be successfully moved the function then decreases the `self.curr_x_pos` by 1.
    - move_block_right(self):
@@ -43,6 +65,10 @@ The controls for DOOMFALL are quite simple:
    - request_draw(self):
       - If block did't reach the bottom of the grid it will request  [MainView](https://github.com/ArturAzarskyy/DOOMFALL#MainView) to redraw the block.
 	 - If block at the bottom of the grid [MainModel](https://github.com/ArturAzarskyy/DOOMFALL#MainModel) `self.is_at_the_bottom()`
+   - place_block_in_grid(self, info):
+     - This method places the given block at the (x,y) position on the grid. Info is a tuple of the x pos, y pos and block.
+   - drop_block(self):
+     - Rotate the current block clockwise, by modifying the 2D-array of `curr_block`
 
 
 - #### MainController:
@@ -63,6 +89,17 @@ The controls for DOOMFALL are quite simple:
  - Artur Azarskyy
  - Abdul Aleem
  - Chi Fung Chan
+ 
+ # Contributions
+ - Daniel Apushkinsky:
+ 	- In this README I had created the DOOMFALL header & short description, part of the navigation, game description, controls, added one screenshot, and added some imformation to Documentation. Throughout the development of the game I have added a multitude of methods: `can_spawn_block()`, `get_full_lines()`, `can_move_down()`, `reset_block()`, `place_block_in_grid()`, `draw_block`() (w/ Artur), `draw_end_game()`, `drop_block` controller and `draw_background()`, and made appropriate changes to our `run_game()` method as new methods were created.
+ - Artur Azarskyy:
+ 	-
+ - Abdul Aleem:
+ 	-
+ - Chi Fung Chan:
+ 	-
+ 
 
 # License
 This project is licensed under the GNU GENERAL PUBLIC LICENSE License - see the [LICENSE.md](LICENSE.md) file for details
